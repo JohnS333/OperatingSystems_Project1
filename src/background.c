@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-int main() {
+void handle_background(void) {
 	int status;
 	pid_t pid = fork();
 

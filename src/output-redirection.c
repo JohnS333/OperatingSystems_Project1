@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int main()
+void handle_output_redirection(void)
 {
 	// duplicate stdout descriptor to index 3 in file descriptor table (saves stdout reference to the open file table)
 	int outfd = dup(STDOUT_FILENO);
@@ -10,6 +10,11 @@ int main()
 	close(STDOUT_FILENO);
 	// creates a fd at index 1 in the file descriptor table; anything printed to stdout will be redirected to text.txt
 	int fd = open("text.txt",O_RDWR | O_CREAT, S_IRUSR);
+	if (fd < 0){
+		perror("open failed");
+	}
+
+	close(fd);
 	// Now we create a new process to execute the command!
 	pid_t pid = fork();
 	// check if inside child process
@@ -30,5 +35,4 @@ int main()
 	close(outfd);
 	// print string to stdout
 	printf("Redirected output to test.txt\n");
-	return 0;
 }

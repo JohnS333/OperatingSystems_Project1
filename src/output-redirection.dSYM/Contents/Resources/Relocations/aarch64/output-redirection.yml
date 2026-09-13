@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/rileygalpin/OperatingSystems_Project1/src/output-redirection'
+relocations:     []
+...

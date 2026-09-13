@@ -2,7 +2,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <stdio.h>
-int main() {
+void execute_command(void) {
 	int status;
 	// what happens if you don't fork? try running execv without it!
 	pid_t pid = fork();

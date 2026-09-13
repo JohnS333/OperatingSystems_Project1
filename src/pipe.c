@@ -2,7 +2,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int main() {
+void handle_pipes(void) {
 	// create array for pipe file descriptors
 	int fd[2];
 	// create read and write end of pipe
@@ -46,5 +46,5 @@ int main() {
 		// remember to use execv() instead of execvp() for the project!
 		execvp(x[0], x);
 	}
-	return 0;
+
 }

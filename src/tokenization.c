@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main() {
+void handle_tokenization(void) {
 	// show example of string tokenization
 	char x[] = "ls -l -a";
 	char *y = strtok(x, " ");
@@ -10,5 +10,4 @@ int main() {
 		printf("%s\n", y);
 		y = strtok(NULL, " ");
 	}
-	return 0;
 }
