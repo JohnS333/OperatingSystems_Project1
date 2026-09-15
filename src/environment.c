@@ -16,6 +16,27 @@ void tokenize(char *input, char *tokens[]) {
     tokens[i] = NULL; 
 }
 
+void handle_tilde_expansion(char *tokens[]) {
+    char *home = getenv("HOME");
+    if (!home) home = "";
+
+    for (int i = 0; tokens[i] != NULL; i++) {
+        
+        if (strcmp(tokens[i], "~") == 0) { //standalone case
+            tokens[i] = home;
+        } 
+        
+        else if (tokens[i][0] == '~' && tokens[i][1] == '/') {
+            
+            char *expanded = malloc(strlen(home) + strlen(tokens[i]));
+            if (expanded) {
+                sprintf(expanded, "%s%s", home, tokens[i] + 1);
+                tokens[i] = expanded; 
+            }
+        }
+    }
+}
+
 void handle_environment_variables(char *input) {
     char *tokens[1024];
 
@@ -35,8 +56,12 @@ void handle_environment_variables(char *input) {
         }
     }
 
+    handle_tilde_expansion(tokens);
+
     for (int i = 0; tokens[i] != NULL; i++) {
         printf("%s ", tokens[i]);
     }
     printf("\n");
 }
+
+
