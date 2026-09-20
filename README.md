@@ -7,18 +7,18 @@ When you are done, make a pull request that merges it back into dev.
 
 For the mnost part, Main branch should only get updated via a pull request from dev.
          
-|         
-        dev
+     
+                 dev
+                  |
+                  ├--|
+                  |  | feature branch
+                  ├--|
+         main     |
+         ├--------|
          |
-         ├--|
-         |  | feature branch
-         ├--|
-main     |
-├--------|
-|
-|
-|
-|
+         |
+         |
+         |
 
 
 [Description]
