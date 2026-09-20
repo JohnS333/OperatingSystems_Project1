@@ -1,0 +1,25 @@
+# Build output from the Makefile
+/bin/*
+/obj/*
+
+# Debugging and compiler artifacts. Should not be git tracked.
+# They are machine- and compiler-dependent intermediate build artifacts
+*.o
+*.a
+*.so
+*.d
+*.dSYM/
+
+# Crash dumps and debugger history
+core
+core.*
+.gdb_history
+
+# IDE/editor settings
+.vscode/
+
+# macOS metadata
+.DS_Store
+
+# Generated build databases
+compile_commands.json
