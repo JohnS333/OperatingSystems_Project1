@@ -1,8 +1,10 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 #include <string.h>
 
 void handle_redirection(char *argv[])
