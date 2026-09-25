@@ -37,11 +37,7 @@ void handle_tilde_expansion(char *tokens[]) {
     }
 }
 
-void handle_environment_variables(char *input) {
-    char *tokens[1024];
-
-    tokenize(input, tokens);
-    
+void handle_environment_variables(char *tokens[]) {
     for (int i = 0; tokens[i] != NULL; i++) {
         if (tokens[i][0] == '$') {
             
@@ -57,11 +53,6 @@ void handle_environment_variables(char *input) {
     }
 
     handle_tilde_expansion(tokens);
-
-    for (int i = 0; tokens[i] != NULL; i++) {
-        printf("%s ", tokens[i]);
-    }
-    printf("\n");
 }
 
 
