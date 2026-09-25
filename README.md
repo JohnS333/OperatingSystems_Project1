@@ -29,10 +29,17 @@ shell/
 │
 ├── src/
 │ ├── main.c
-│ └── shell.c
+│ ├── background.c
+│ ├── output-redirection.c
+│ ├── pipe.c
+│ ├── signals.c
+│ ├── tokenization.c
+│ ├── execution.c
+│ ├── environment.c
 │
 ├── include/
-│ └── shell.h
+│ └── prompt.h
+│ └── env_var.h
 │
 ├── README.md
 └── Makefile
