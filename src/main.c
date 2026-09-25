@@ -54,6 +54,7 @@ int main(void) {
             if (path == NULL) {
                 fprintf(stderr, "%s: command not found\n", argv[0]);
             } else {
+                // External command execution
                 execute_command(path, argv);
                 free(path);
             }
