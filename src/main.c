@@ -18,7 +18,7 @@ int main(void) {
         char *buffer = NULL;
         size_t bufsize = 0; 
         ssize_t characters;
-
+        bool has_redirection = false;
         print_prompt();
         //Read the complete line from standard input
         characters = getline(&buffer, &bufsize, stdin);
@@ -47,17 +47,27 @@ int main(void) {
                     continue; // Skip to the next iteration of the while loop if the command is not found in PATH
                 }
             }
-
+            // Check if the command has output redirection at all
+            for (int i = 0; argv[i] != NULL; i++) {
+                if (strcmp(argv[i], "<") == 0 || strcmp(argv[i], ">") == 0) {
+                    has_redirection = true;
+                    break;
+                }
+            }
 
             char *path = find_command_path(argv[0]); // the first command argument is the command name. we find the path
 
             if (path == NULL) {
                 fprintf(stderr, "%s: command not found\n", argv[0]);
             } else {
-                // External command execution
-                execute_command(path, argv);
+                if (has_redirection) {
+                    handle_redirection(path, argv);
+                } else {
+                    execute_command(path, argv);
+                }
+
                 free(path);
-            }
+}
                 
         }
 
