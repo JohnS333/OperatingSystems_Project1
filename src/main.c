@@ -9,6 +9,7 @@
 #include "env_var.h"
 #include "execution.h"
 #include "env_var.h"
+#include "pipe.h"
 #include "output_redirection.h"
 
 
@@ -65,22 +66,29 @@ int main(void) {
                 }
             }
 
-            char *path = find_command_path(argv[0]); // the first command argument is the command name. we find the path
-
-            if (path == NULL) {
-                fprintf(stderr, "%s: command not found\n", argv[0]);
+            if (has_piping) {
+                // handle_pipes finds the path for every command in the pipeline.
+                handle_pipes(argv);
             } else {
                 if (has_redirection) {
-                    handle_redirection(path, argv);
-                    // handle_redirection also executes? -- yes
-                } else {
-                    if (has_piping) { // piping and has_redirection are mutually exclusive unless we want to do extra credit.
-                        handle_pipes(path, argv);
-                    } else {
-                        execute_command(path, argv);
+                    char *path = find_command_path(argv[0]);
+                    if (path == NULL) {
+                        fprintf(stderr, "%s: command not found\n", argv[0]);
+                        free(buffer);
+                        continue;
                     }
+                    handle_redirection(path, argv);
+                    free(path);
+                } else {
+                    char *path = find_command_path(argv[0]);
+                    if (path == NULL) {
+                        fprintf(stderr, "%s: command not found!\n", argv[0]);
+                        free(buffer);
+                        continue;
+                    }
+                        execute_command(path, argv);
+                    free(path);
                 }
-                free(path);
             }
                 
         }
