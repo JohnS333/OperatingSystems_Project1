@@ -22,7 +22,7 @@ int main(void) {
         ssize_t characters;
         bool has_redirection = false;
         print_prompt();
-        //Read the complete line from standard input
+        //Read the complete line from standard input and store it in the buffer
         characters = getline(&buffer, &bufsize, stdin);
 
         if (characters == -1) {
@@ -41,11 +41,11 @@ int main(void) {
                 continue;
             }
             //Is the command a path or just a command name?
-            if (strchr(buffer, '/') == NULL) {
+            if (strchr(argv[0], '/') == NULL) {
                 // The command is not a path, search in PATH
                 
-                if (search_path(buffer) != 0) {
-                    fprintf(stderr, "Command not found: %s\n", buffer);
+                if (search_path(argv[0]) != 0) {
+                    fprintf(stderr, "Command not found: %s\n", argv[0]);
                     continue; // Skip to the next iteration of the while loop if the command is not found in PATH
                 }
             }
