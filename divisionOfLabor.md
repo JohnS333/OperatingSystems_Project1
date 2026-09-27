@@ -16,26 +16,26 @@ Part 0: Tokenization - [Just use the provided code]
 
 # Part 1: Prompt  [Parsing Phase]
 - Riley, John 
-[Done: True ] [Tested: ? ]
+- [Done: True ] [Tested: ? ]
 
 
 # Part 2: Environment Variables [Parsing Phase]
 - Riley, Taylor
-[Done: True ] [Tested: ? ]
+- [Done: True ] [Tested: ? ]
 
 # Part 3: Tilde Expansion [Parsing Phase]
 - Riley, Taylor
-[Done: True ] [Tested: ? ]
+- [Done: True ] [Tested: ? ]
 
 
 # Part 4: $PATH Search  [Parsing Phase]
 - John , Riley
-[Done: True ] [Tested: ? ]
+- [Done: True ] [Tested: ? ]
 
 
 # Part 5: External Command Execution
 - Taylor, Riley
-[Done:  ] [Tested: ]
+- [Done: Yes ] [Tested: Yes ]
 
 # Part 6: I/O Redirection
 - Taylor, John 
@@ -43,14 +43,14 @@ Part 0: Tokenization - [Just use the provided code]
 
 # Part 7: Piping
 - John,  Riley
-[Done:  ] [Tested: ]
+- [Done:  ] [Tested: ]
 
 
 # Part 8: Background Processing
 - John, Taylor
-[Done:  ] [Tested: ]
+- [Done:  ] [Tested: ]
 
 
 # Part 9: Internal Command Execution
 - Taylor, John 
-[Done:  ] [Tested: ]    
+- [Done:  ] [Tested: ]    
