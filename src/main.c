@@ -49,10 +49,18 @@ int main(void) {
                     continue; // Skip to the next iteration of the while loop if the command is not found in PATH
                 }
             }
-            // Check if the command has output redirection at all
+            // Check if the command has io redirection at all
             for (int i = 0; argv[i] != NULL; i++) {
                 if (strcmp(argv[i], "<") == 0 || strcmp(argv[i], ">") == 0) {
                     has_redirection = true;
+                    break;
+                }
+            }
+            // Check if the command has piping at all
+            bool has_piping = false;
+            for (int i = 0; argv[i] != NULL; i++) {
+                if (strcmp(argv[i], "|") == 0) {
+                    has_piping = true;
                     break;
                 }
             }
@@ -64,13 +72,16 @@ int main(void) {
             } else {
                 if (has_redirection) {
                     handle_redirection(path, argv);
-                    // handle_redirection also executes? -- yes or no? 
+                    // handle_redirection also executes? -- yes
                 } else {
-                    execute_command(path, argv);
+                    if (has_piping) { // piping and has_redirection are mutually exclusive unless we want to do extra credit.
+                        handle_pipes(path, argv);
+                    } else {
+                        execute_command(path, argv);
+                    }
                 }
-
                 free(path);
-}
+            }
                 
         }
 
