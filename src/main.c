@@ -9,6 +9,8 @@
 #include "env_var.h"
 #include "execution.h"
 #include "env_var.h"
+#include "output_redirection.h"
+
 
 
 
@@ -18,9 +20,9 @@ int main(void) {
         char *buffer = NULL;
         size_t bufsize = 0; 
         ssize_t characters;
-
+        bool has_redirection = false;
         print_prompt();
-        //Read the complete line from standard input
+        //Read the complete line from standard input and store it in the buffer
         characters = getline(&buffer, &bufsize, stdin);
 
         if (characters == -1) {
@@ -39,25 +41,36 @@ int main(void) {
                 continue;
             }
             //Is the command a path or just a command name?
-            if (strchr(buffer, '/') == NULL) {
+            if (strchr(argv[0], '/') == NULL) {
                 // The command is not a path, search in PATH
                 
-                if (search_path(buffer) != 0) {
-                    fprintf(stderr, "Command not found: %s\n", buffer);
+                if (search_path(argv[0]) != 0) {
+                    fprintf(stderr, "Command not found: %s\n", argv[0]);
                     continue; // Skip to the next iteration of the while loop if the command is not found in PATH
                 }
             }
-
+            // Check if the command has output redirection at all
+            for (int i = 0; argv[i] != NULL; i++) {
+                if (strcmp(argv[i], "<") == 0 || strcmp(argv[i], ">") == 0) {
+                    has_redirection = true;
+                    break;
+                }
+            }
 
             char *path = find_command_path(argv[0]); // the first command argument is the command name. we find the path
 
             if (path == NULL) {
                 fprintf(stderr, "%s: command not found\n", argv[0]);
             } else {
-                // External command execution
-                execute_command(path, argv);
+                if (has_redirection) {
+                    handle_redirection(path, argv);
+                    // handle_redirection also executes? -- yes or no? 
+                } else {
+                    execute_command(path, argv);
+                }
+
                 free(path);
-            }
+}
                 
         }
 
