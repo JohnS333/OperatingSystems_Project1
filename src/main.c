@@ -9,6 +9,8 @@
 #include "env_var.h"
 #include "execution.h"
 #include "env_var.h"
+#include "output_redirection.h"
+
 
 
 
@@ -62,6 +64,7 @@ int main(void) {
             } else {
                 if (has_redirection) {
                     handle_redirection(path, argv);
+                    // handle_redirection also executes? -- yes or no? 
                 } else {
                     execute_command(path, argv);
                 }

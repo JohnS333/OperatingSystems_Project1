@@ -7,7 +7,7 @@
 #include <sys/wait.h>
 #include <string.h>
 
-void handle_redirection(char *argv[])
+void handle_redirection(char *path, char *argv[])
 {
 	char *input_file = NULL;
 	char *output_file = NULL;
@@ -113,7 +113,7 @@ void handle_redirection(char *argv[])
 	}
 
 
-	execv(command_argv[0], command_argv);
+	execv(path, command_argv);
 
 		perror("Exec failed");
 		_exit(127);
@@ -123,4 +123,7 @@ void handle_redirection(char *argv[])
 	if (waitpid(pid, NULL, 0) < 0) {
 		perror("Waitpid failed");
 	}
+	//^^ TODO:see if we can use execute_command() from execution.c here. instead 
+
+	// Parent process continues here after the child has executed or failed
 }
