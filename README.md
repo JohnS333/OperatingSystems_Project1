@@ -33,12 +33,15 @@ shell/
 │ ├── output-redirection.c
 │ ├── pipe.c
 │ ├── signals.c
+│ ├── path_search.c
 │ ├── tokenization.c
 │ ├── execution.c
 │ ├── environment.c
 │
 ├── include/
 │ └── prompt.h
+│ └── path_search.h
+│ └── execution.h
 │ └── env_var.h
 │
 ├── README.md
@@ -67,7 +70,15 @@ This will run the program ...
 ## Development Log
 Each member records their contributions here.
 
-### [Member 1]
+### John Simson
+
+| Date       | Work Completed / Notes |
+|------------|------------------------|
+| 2026-09-25 | path search implementation, make .h files, and  fix environment.c functions |
+| YYYY-MM-DD | [Description of task]  |
+| YYYY-MM-DD | [Description of task]  |
+
+### Riley Galpin
 
 | Date       | Work Completed / Notes |
 |------------|------------------------|
@@ -75,16 +86,8 @@ Each member records their contributions here.
 | YYYY-MM-DD | [Description of task]  |
 | YYYY-MM-DD | [Description of task]  |
 
-### [Member 2]
 
-| Date       | Work Completed / Notes |
-|------------|------------------------|
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
-
-
-### [Member 3]
+### Taylor Vaughn
 
 | Date       | Work Completed / Notes |
 |------------|------------------------|
