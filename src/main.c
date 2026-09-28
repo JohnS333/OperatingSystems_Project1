@@ -65,6 +65,13 @@ int main(void) {
                     break;
                 }
             }
+            bool is_background = false;
+            for (int i = 0; argv[i] != NULL; i++) {
+                if (strcmp(argv[i], "&") == 0) {
+                    is_background = true;
+                    break;
+                }
+            }
 
             if (has_piping) {
                 // handle_pipes finds the path for every command in the pipeline.
