@@ -8,6 +8,15 @@
 
 char *find_command_path(const char *command) {
 	//This function searches for the given command in the directories listed in the PATH environment variable, and returns a pointer to the full path of the command if found, or NULL if not found.
+
+	//first check if the input contains /'s already, in which case we can directly check if it is executable
+	if (strchr(command, '/') != NULL) {
+		if (access(command, X_OK) == 0) {
+			return strdup(command); // we just return it as is
+		}
+		return NULL;
+	}
+
 	char *path = getenv("PATH");
 	if (path == NULL) {
 		fprintf(stderr, "PATH environment variable not set\n");
