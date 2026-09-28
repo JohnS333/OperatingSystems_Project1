@@ -83,6 +83,7 @@ void handle_pipes(char *argv[], bool is_background) {
     pid_t children[3]; //this array will store the PIDs of the child processes created for each command in the pipeline.
     for (int command = 0; command < command_count; command++) {
         children[command] = fork();
+        // each child process continues from the point where it was forked.
 
         if (children[command] == -1) {
             perror("fork");
@@ -90,15 +91,17 @@ void handle_pipes(char *argv[], bool is_background) {
         }
 
         if (children[command] == 0) {
+            // children[command #] should return 0 if it is the child process for the current command.
             // Every command after the first reads from the previous pipe.
             if (command > 0) {
                 dup2(pipes[command - 1][0], STDIN_FILENO);
+                // this only executes on the 2nd command and beyond, not on the first command.
                 //This ensures that the current command reads from the previous command's output.
                 //Make standard input (STDIN_FILENO, descriptor 0) read from the previous pipe.
             }
 
             // Every command before the last writes to the next pipe.
-            if (command < command_count - 1) {
+            if (command < command_count - 1) {  // this only executes on all commands except the last one, which does not write to any pipe.
                 dup2(pipes[command][1], STDOUT_FILENO);
                 //This ensures that the current command writes to the next command's input.
                 //Make standard output (STDOUT_FILENO, descriptor 1) write to the next pipe.
