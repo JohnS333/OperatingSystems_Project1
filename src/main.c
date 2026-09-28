@@ -8,13 +8,42 @@
 #include "path_search.h"
 #include "env_var.h"
 #include "execution.h"
-#include "env_var.h"
 #include "pipe.h"
 #include "output_redirection.h"
 #include "cd.h"
 #include "jobs.h"
 
 const int MAX_JOBS = 10;
+
+#define MAX_HISTORY 3
+#define MAX_COMMAND_LENGTH 200
+
+static char command_history[MAX_HISTORY][MAX_COMMAND_LENGTH];
+static int history_count = 0;
+static void add_command_history(const char *command) {
+    if (history_count < MAX_HISTORY) {
+        strncpy(command_history[history_count], command, MAX_COMMAND_LENGTH - 1);
+        command_history[history_count][MAX_COMMAND_LENGTH - 1] = '\0'; // Ensure null termination
+        history_count++;
+    } else {
+        // Shift commands up to make room for the new command
+        for (int i = 1; i < MAX_HISTORY; i++) {
+            strncpy(command_history[i - 1], command_history[i], MAX_COMMAND_LENGTH);
+        }
+        strncpy(command_history[MAX_HISTORY - 1], command, MAX_COMMAND_LENGTH - 1);
+        command_history[MAX_HISTORY - 1][MAX_COMMAND_LENGTH - 1] = '\0'; // Ensure null termination
+    }
+}
+
+static void print_command_history(void) {
+    if (history_count == 0) {
+        printf("No valid commands.\n");
+        return;
+    }
+    for (int i = 0; i < history_count; i++) {
+        printf("%s\n", command_history[i]);
+    }
+}
 
 struct job {
     int job_number;       // 1, 2, 3...
@@ -67,6 +96,16 @@ int main(void) {
                 free(buffer);
                 continue;
             }
+            // Check if the command is "exit" and handle it separately
+            if (strcmp(argv[0], "exit") == 0) {
+                wait_for_jobs();
+                print_command_history();
+
+                free_expanded_tokens(allocated_tokens);
+                free(command_line);
+                free(buffer);
+                break;
+            }
             // Check if the command is "jobs" and handle it separately
             if (strcmp(argv[0], "jobs") == 0) {
                 check_jobs();
@@ -96,6 +135,8 @@ int main(void) {
                     break;
                 }
             }
+            // Add the command to history after passing through validation
+            add_command_history(command_line);
             // Check if the command has piping at all
             bool has_piping = false;
             for (int i = 0; argv[i] != NULL; i++) {
