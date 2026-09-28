@@ -95,9 +95,9 @@ Each member records their contributions here.
 
 | Date       | Work Completed / Notes |
 |------------|------------------------|
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
+| 2026-09-22 | [Completed part 5 and testing]  |
+| 2026-09-22 | [Completed part 6 and testing]  |
+| 2026-09-28 | [Completed part 9 and testing for all parts]  |
 
 
 ## Meetings
