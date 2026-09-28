@@ -12,7 +12,14 @@
 #include "pipe.h"
 #include "output_redirection.h"
 
+int MAX_JOBS = 10;
 
+struct job {
+    int job_number;       // 1, 2, 3...
+    pid_t pid;             // or process group ID
+    char *command;         // display text for jobs
+    int status;            // running, done, stopped, etc.
+};
 
 
 int main(void) {
@@ -69,13 +76,14 @@ int main(void) {
             for (int i = 0; argv[i] != NULL; i++) {
                 if (strcmp(argv[i], "&") == 0) {
                     is_background = true;
+                    argv[i] = NULL; // Remove the '&' from the argument list
                     break;
                 }
             }
 
             if (has_piping) {
                 // handle_pipes finds the path for every command in the pipeline.
-                handle_pipes(argv);
+                handle_pipes(argv, is_background);
             } else {
                 if (has_redirection) {
                     char *path = find_command_path(argv[0]);
@@ -84,7 +92,7 @@ int main(void) {
                         free(buffer);
                         continue;
                     }
-                    handle_redirection(path, argv);
+                    handle_redirection(path, argv, is_background);
                     free(path);
                 } else {
                     char *path = find_command_path(argv[0]);
@@ -93,7 +101,7 @@ int main(void) {
                         free(buffer);
                         continue;
                     }
-                        execute_command(path, argv);
+                        execute_command(path, argv, is_background);
                     free(path);
                 }
             }
