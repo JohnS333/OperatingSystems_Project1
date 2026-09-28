@@ -70,6 +70,10 @@ void handle_pipes(char *argv[], bool is_background) {
     for (int i = 0; i < command_count - 1; i++) { // for every command
         if (pipe(pipes[i]) == -1) { // create pipe and check for failure
             perror("pipe");
+            for (int j = 0; j < i; j++) {
+                 close(pipes[j][0]);
+                 close(pipes[j][1]);
+             }
             for (int j = 0; j < command_count; j++) {
                 free(paths[j]);
             }
