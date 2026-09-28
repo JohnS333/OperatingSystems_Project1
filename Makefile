@@ -1,6 +1,6 @@
 # Compiler and flags
 CC       := gcc
-CFLAGS   := -Wall -Wextra -Werror -std=c99 -pedantic -D_POSIX_C_SOURCE=200809L -Iinclude -g -fsanitize=address
+CFLAGS   := -Wall -Wextra -Werror -std=c99 -pedantic -D_POSIX_C_SOURCE=200809L -Iinclude -g
 
 # Directories
 SRC_DIR  := src
