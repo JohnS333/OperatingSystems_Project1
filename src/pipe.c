@@ -91,6 +91,12 @@ void handle_pipes(char *argv[], bool is_background) {
 
         if (children[command] == -1) {
             perror("fork");
+            for (int i = 0; i < command_count - 1; i++) {
+                close(pipes[i][0]);
+                close(pipes[i][1]);
+            for (int j = 0; j < command_count; j++) {
+                free(paths[j]);
+            }
             return;
         }
 
@@ -131,7 +137,11 @@ void handle_pipes(char *argv[], bool is_background) {
     if (!is_background) {
     for (int i = 0; i < command_count; i++) { // if this process is not background, wait for all child processes
         waitpid(children[i], NULL, 0);
+        
+    }
+    }
+    for (int i = 0; i < command_count; i++) {
         free(paths[i]);
     }
-    }
+
 }
