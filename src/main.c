@@ -81,6 +81,7 @@ int main(void) {
             char *argv[1024];   //establish the array of tokenized command arguments
             char *allocated_tokens[1024] = {NULL};
             tokenize(buffer, argv);
+            check_jobs();
             handle_environment_variables(argv, allocated_tokens); // this function modifies argv and tracks allocated expansions
             if (argv[0] == NULL) {
                 free_expanded_tokens(allocated_tokens);

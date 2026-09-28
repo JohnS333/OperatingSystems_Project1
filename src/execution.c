@@ -28,10 +28,14 @@ void execute_command(char *path, char *argv[], bool is_background,
 			perror("Waitpid failed");
 		}
 	} else {
-		if (add_job(pid, command_line) < 0) {
+		check_jobs();
+		int jobnum = add_job(pid, command_line);
+		if (jobnum < 0) {
 			perror("Failed to add job to array");
 		}
-		printf("[background process started: %d]\n", pid);
+		else {
+		printf("[%d] %d\n", jobnum, pid);
+		}
 	}
 }
 

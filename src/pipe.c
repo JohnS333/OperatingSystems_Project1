@@ -137,7 +137,13 @@ void handle_pipes(char *argv[], bool is_background, char *command_line) {
         close(pipes[i][1]);
     }
 		if (is_background) {
-			add_job(children[command_count - 1], command_line);
+			check_jobs();
+			int jobnumber = add_job(children[command_count - 1], command_line);
+			if (jobnumber < 0) {
+				fprintf(stderr, "Failed to add background job\n");
+			} else {
+				printf("[%d] %d\n", jobnumber, children[command_count - 1]);
+			}
 		} else {
 			for (int i = 0; i < command_count; i++) {
 				waitpid(children[i], NULL, 0);

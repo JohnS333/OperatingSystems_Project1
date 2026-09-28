@@ -128,7 +128,6 @@ void handle_redirection(char *path, char *argv[], bool is_background, char *comm
 			perror("Waitpid failed");
 		}
 		} 	else {
-				printf("[background process started: %d]\n", pid);
 				int job_number = add_job(pid, command_line);
 
 				if (job_number < 0) {
