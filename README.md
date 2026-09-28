@@ -57,6 +57,7 @@ shell/
 ### Compilation
 For a C/C++ example:
 ```bash
+make clean
 make
 ```
 This will build the executable in ...
@@ -64,7 +65,7 @@ This will build the executable in ...
 
 ### Execution
 ```bash
-make run
+bin/shell
 ```
 This will run the program ...
 
