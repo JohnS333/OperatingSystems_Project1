@@ -105,8 +105,8 @@ Document in-person meetings, their purpose, and what was discussed.
 
 | Date       | Attendees            | Topics Discussed | Outcomes / Decisions |
 |------------|----------------------|------------------|-----------------------|
-| YYYY-MM-DD | [Names]              | [Agenda items]   | [Actions/Next steps]  |
-| YYYY-MM-DD | [Names]              | [Agenda items]   | [Actions/Next steps]  |
+| 2026-09-13 | Riley Galpin, Taylor Vaugn,  John Simson| Division of Labor   | Discussed and decided how to divide work and began on parts 1-3 and documentation |
+| 2026-09-27| Riley Galpin, Taylor Vaugn,  John Simson | Final Product, Testing, Parts 8&9  | Finished up parts 8 & 9 and began testing as a group. Discussed next steps for testing and began completing final documentation|
 
 
 
