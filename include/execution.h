@@ -1,6 +1,8 @@
 #ifndef EXECUTION_H
 #define EXECUTION_H
 
-void execute_command(char *path, char *argv[]);
+#include <stdbool.h>
+
+void execute_command(char *path, char *argv[], bool is_background);
 
 #endif
