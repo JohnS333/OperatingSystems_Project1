@@ -120,15 +120,15 @@ void handle_redirection(char *path, char *argv[], bool is_background)
 		perror("Exec failed");
 		_exit(127);
 	}
+		//^^ TODO:see if we can use execute_command() from execution.c here. instead 
 
 	if (!is_background) {
 		if (waitpid(pid, NULL, 0) < 0) {
 			perror("Waitpid failed");
 		}
-		//^^ TODO:see if we can use execute_command() from execution.c here. instead 
-			else {
+		} 	else {
 				printf("[background process started: %d]\n", pid);
 			}
-		}
+
 	// Parent process continues here after the child has executed or failed
 }
