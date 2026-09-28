@@ -6,8 +6,10 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <stdbool.h>
 
-void handle_redirection(char *path, char *argv[])
+
+void handle_redirection(char *path, char *argv[], bool is_background)
 {
 	char *input_file = NULL;
 	char *output_file = NULL;
@@ -119,11 +121,14 @@ void handle_redirection(char *path, char *argv[])
 		_exit(127);
 	}
 
-
-	if (waitpid(pid, NULL, 0) < 0) {
-		perror("Waitpid failed");
-	}
-	//^^ TODO:see if we can use execute_command() from execution.c here. instead 
-
+	if (!is_background) {
+		if (waitpid(pid, NULL, 0) < 0) {
+			perror("Waitpid failed");
+		}
+		//^^ TODO:see if we can use execute_command() from execution.c here. instead 
+			else {
+				printf("[background process started: %d]\n", pid);
+			}
+		}
 	// Parent process continues here after the child has executed or failed
 }
