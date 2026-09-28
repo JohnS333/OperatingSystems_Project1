@@ -76,8 +76,8 @@ Each member records their contributions here.
 | Date       | Work Completed / Notes |
 |------------|------------------------|
 | 2026-09-25 | path search implementation, make .h files, and  fix environment.c functions |
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
+| 2026-09-27| IO redirection implementation, piping + enabling background process compatibility  |
+| 2026-09-28 | Bug fixes for memory leaks, Finished jobs system. Tested code  |
 
 ### Riley Galpin
 
