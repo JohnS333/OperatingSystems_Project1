@@ -94,6 +94,7 @@ void handle_pipes(char *argv[], bool is_background) {
             for (int i = 0; i < command_count - 1; i++) {
                 close(pipes[i][0]);
                 close(pipes[i][1]);
+			}
             for (int j = 0; j < command_count; j++) {
                 free(paths[j]);
             }
@@ -143,7 +144,5 @@ void handle_pipes(char *argv[], bool is_background) {
     for (int i = 0; i < command_count; i++) {
         free(paths[i]);
     }
-
-}
 
 }
