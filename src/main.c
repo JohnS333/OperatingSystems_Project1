@@ -9,9 +9,17 @@
 #include "env_var.h"
 #include "execution.h"
 #include "env_var.h"
+#include "pipe.h"
 #include "output_redirection.h"
 
+int MAX_JOBS = 10;
 
+struct job {
+    int job_number;       // 1, 2, 3...
+    pid_t pid;             // or process group ID
+    char *command;         // display text for jobs
+    int status;            // running, done, stopped, etc.
+};
 
 
 int main(void) {
@@ -49,28 +57,54 @@ int main(void) {
                     continue; // Skip to the next iteration of the while loop if the command is not found in PATH
                 }
             }
-            // Check if the command has output redirection at all
+            // Check if the command has io redirection at all
             for (int i = 0; argv[i] != NULL; i++) {
                 if (strcmp(argv[i], "<") == 0 || strcmp(argv[i], ">") == 0) {
                     has_redirection = true;
                     break;
                 }
             }
+            // Check if the command has piping at all
+            bool has_piping = false;
+            for (int i = 0; argv[i] != NULL; i++) {
+                if (strcmp(argv[i], "|") == 0) {
+                    has_piping = true;
+                    break;
+                }
+            }
+            bool is_background = false;
+            for (int i = 0; argv[i] != NULL; i++) {
+                if (strcmp(argv[i], "&") == 0) {
+                    is_background = true;
+                    argv[i] = NULL; // Remove the '&' from the argument list
+                    break;
+                }
+            }
 
-            char *path = find_command_path(argv[0]); // the first command argument is the command name. we find the path
-
-            if (path == NULL) {
-                fprintf(stderr, "%s: command not found\n", argv[0]);
+            if (has_piping) {
+                // handle_pipes finds the path for every command in the pipeline.
+                handle_pipes(argv, is_background);
             } else {
                 if (has_redirection) {
-                    handle_redirection(path, argv);
-                    // handle_redirection also executes? -- yes or no? 
+                    char *path = find_command_path(argv[0]);
+                    if (path == NULL) {
+                        fprintf(stderr, "%s: command not found\n", argv[0]);
+                        free(buffer);
+                        continue;
+                    }
+                    handle_redirection(path, argv, is_background);
+                    free(path);
                 } else {
-                    execute_command(path, argv);
+                    char *path = find_command_path(argv[0]);
+                    if (path == NULL) {
+                        fprintf(stderr, "%s: command not found!\n", argv[0]);
+                        free(buffer);
+                        continue;
+                    }
+                        execute_command(path, argv, is_background);
+                    free(path);
                 }
-
-                free(path);
-}
+            }
                 
         }
 

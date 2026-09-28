@@ -2,23 +2,31 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <stdio.h>
-void execute_command(char *path, char *argv[]) {
+#include <stdbool.h>
+
+
+void execute_command(char *path, char *argv[], bool is_background) {
 	int status;
-	// what happens if you don't fork? try running execv without it!
+	// what happens if you don't fork? - The shell will convert into the executed command, losing its own identity, 
+	// no longer allowing the shell to continue executing other commands.
+	//therefore we must fork
 	pid_t pid = fork();
 
-	if (pid < 0) {
+	if (pid < 0) { //if fork failed
 		perror("Fork failed");
 		exit(1);
 	}
-	if (pid == 0) {
+	if (pid == 0) { //if this is the child process
 		execv(path, argv);
 		perror("Exec failed");
 		_exit(127);
 	}
-	if (waitpid(pid, &status, 0) < 0) {
-		perror("Waitpid failed");
+	if (!is_background) {
+		if (waitpid(pid, &status, 0) < 0) {
+			perror("Waitpid failed");
+		}
+	} else {
+		printf("[background process started: %d]\n", pid);
 	}
-
 }
 

@@ -1,6 +1,8 @@
 #ifndef OUTPUT_REDIRECTION_H
 #define OUTPUT_REDIRECTION_H
 
-void handle_redirection(char *path, char *argv[]);
+#include <stdbool.h>
+
+void handle_redirection(char *path, char *argv[], bool is_background);
 
 #endif
