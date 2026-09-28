@@ -65,7 +65,7 @@ int print_jobs(void) {
 
     for (int i = 0; i < job_count; i++) {
         if (jobs[i].running) {
-            printf("[%d]+ %d %s\n",
+            printf("[%d] + %d running %s\n",
                    jobs[i].job_number,
                    jobs[i].pid,
                    jobs[i].command);

@@ -6,7 +6,8 @@
 #include "jobs.h"
 
 
-void execute_command(char *path, char *argv[], bool is_background) {
+void execute_command(char *path, char *argv[], bool is_background,
+					 char *command_line) {
 	int status;
 	// what happens if you don't fork? - The shell will convert into the executed command, losing its own identity, 
 	// no longer allowing the shell to continue executing other commands.
@@ -27,7 +28,7 @@ void execute_command(char *path, char *argv[], bool is_background) {
 			perror("Waitpid failed");
 		}
 	} else {
-		if(add_job(pid, argv[0]) < 0) {
+		if (add_job(pid, command_line) < 0) {
 			perror("Failed to add job to array");
 		}
 		printf("[background process started: %d]\n", pid);

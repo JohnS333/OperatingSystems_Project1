@@ -154,6 +154,16 @@ int main(void) {
                 }
             }
 
+            char *background_marker = strchr(command_line, '&');
+
+            if (background_marker != NULL) {
+                *background_marker = '\0';
+
+                if (background_marker > command_line && background_marker[-1] == ' ') {
+                    background_marker[-1] = '\0'; // replaces the space before '&' with a null terminator
+                }
+            }
+
             if (has_piping) {
                 // handle_pipes finds the path for every command in the pipeline.
                 handle_pipes(argv, is_background, command_line);
