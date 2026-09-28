@@ -145,3 +145,5 @@ void handle_pipes(char *argv[], bool is_background) {
     }
 
 }
+
+}
