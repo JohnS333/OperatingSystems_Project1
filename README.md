@@ -40,11 +40,11 @@ shell/
 ## How to Compile & Execute
 
 ### Requirements
-- **Compiler**: e.g., `gcc` for C/C++, `rustc` for Rust.
-- **Dependencies**: List any libraries or frameworks necessary (rust only).
+- **Compiler**: e.g., `gcc` for C/C++.
+
 
 ### Compilation
-For a C/C++ example:
+
 ```bash
 make
 ```
@@ -53,20 +53,22 @@ This will build the executable in ...
 
 ### Execution
 ```bash
-make run
+./bin/shell 
 ```
 This will run the program ...
 
 ## Development Log
 Each member records their contributions here.
 
-### [Member 1]
+### [Riley Galpin]
 
 | Date       | Work Completed / Notes |
 |------------|------------------------|
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
+| 2026-09-14 | Completed part 1 and testing|
+| 2026-09-15 | Completed part 2 and testing|
+| 2026-09-16 | Completed part 3 and testing|
+| 2026-09-28 |  Completed comprehensive testing for parts 1-8, found output alignment bugs and null errors|
+
 
 ### [Member 2]
 
@@ -87,7 +89,7 @@ Each member records their contributions here.
 
 
 ## Meetings
-Document in-person meetings, their purpose, and what was discussed.
+Document in-person meetings, their purpose, and what was discussed. -> N/A
 
 | Date       | Attendees            | Topics Discussed | Outcomes / Decisions |
 |------------|----------------------|------------------|-----------------------|
@@ -97,9 +99,9 @@ Document in-person meetings, their purpose, and what was discussed.
 
 
 ## Bugs
-- **Bug 1**: This is bug 1.
-- **Bug 2**: This is bug 2.
-- **Bug 3**: This is bug 3.
+- **Bug 1**: Errors running on Linprog due to differences in environment specifically in using getline()
+- **Bug 2**: Errors with piping when executing (ls -la | grep shell)
+- **Bug 3**: Output missalignments when executing tests with background processing and piping.
 
 ## Extra Credit
 - **Extra Credit 1**: [Extra Credit Option]
