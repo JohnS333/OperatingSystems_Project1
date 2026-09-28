@@ -1,50 +1,130 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
+#include <stdbool.h>
 
-void handle_pipes(void) {
-	// create array for pipe file descriptors
-	int fd[2];
-	// create read and write end of pipe
-	pipe(fd);
-	printf("fd[0] = %d, fd[1] = %d\n", fd[0], fd[1]);
-	// create new process
-	pid_t pid = fork();
+#include "path_search.h"
 
-	// child process
-	if(pid == 0) {
-		// initialize command
-		char *x[2];
-		x[0] = "ls";
-		x[1] = NULL;
+void handle_pipes(char *argv[], bool is_background) {
+    int first_pipe = -1;
+    int second_pipe = -1;
 
-		// replace stdout with write end of pipe
-		dup2(fd[1], STDOUT_FILENO);
-		// close read end of pipe
-		close(fd[0]);
-		// close duplicate reference to write end of pipe
-		close(fd[1]);
+    // Find the two |s in the tokenized command.
+    for (int i = 0; argv[i] != NULL; i++) {
+        if (strcmp(argv[i], "|") == 0) {
+            if (first_pipe == -1) {
+                first_pipe = i;
+            } else if (second_pipe == -1) {
+                second_pipe = i;
+            } else {
+                fprintf(stderr, "A maximum of two pipes is supported\n");
+                return;
+            }
+        }
+    }
 
-		// remember to use execv() instead of execvp() for the project!
-		execvp(x[0], x);
-	}
-	// parent process
-	else {
-		// initialize command
-		char *x[3];
-		x[0] = "wc";
-		x[1] = "-l";
-		x[2] = NULL;
+    if (first_pipe == -1 || argv[first_pipe + 1] == NULL ||
+        (second_pipe != -1 && (argv[second_pipe + 1] == NULL || second_pipe == first_pipe + 1))) {
+        fprintf(stderr, "Invalid pipe\n");
+        return;
+    }
 
-		// replace stdin with read end of pipe
-		dup2(fd[0], STDIN_FILENO);
-		// close read end of pipe
-		close(fd[0]);
-		// close duplicate reference to write end of pipe
-		close(fd[1]);
+    // Replace each | with NULL so each command has its own argv array.
+    char **commands[3]; // this is an array of argv arrays for each command in the pipeline. 
+    argv[first_pipe] = NULL; // this replaces the first pipe with a NULL terminator to separate the first command from the rest
+    commands[0] = argv;
 
-		// remember to use execv() instead of execvp() for the project!
-		execvp(x[0], x);
-	}
+    if (second_pipe == -1) {
+        commands[1] = &argv[first_pipe + 1];
+        commands[2] = NULL;
+    } else {
+        argv[second_pipe] = NULL;
+        commands[1] = &argv[first_pipe + 1]; //this sets the pointer to the position after the first pipe
+        commands[2] = &argv[second_pipe + 1]; //this sets the pointer to the position after the second pipe
+    }
 
+    int command_count = second_pipe == -1 ? 2 : 3;
+    char *paths[3] = {NULL, NULL, NULL};
+
+    // Find a full path for every command before creating the children.
+    for (int i = 0; i < command_count; i++) {
+        paths[i] = find_command_path(commands[i][0]);
+        if (paths[i] == NULL) {
+            fprintf(stderr, "Command not found: %s\n", commands[i][0]);
+            for (int j = 0; j <= i; j++) {
+                free(paths[j]);
+            }
+            return;
+        }
+    }
+
+    // Two commands need one pipe; three commands need two pipes.
+    int pipes[2][2];
+    // the initial values of the pipes array are undefined, so we need to create the pipes before using them.
+    // this array will store the file descriptors for the pipes used in the pipeline.
+    // pipes[i][0]  read end
+    // pipes[i][1]  write end
+    for (int i = 0; i < command_count - 1; i++) { // for every command
+        if (pipe(pipes[i]) == -1) { // create pipe and check for failure
+            perror("pipe");
+            for (int j = 0; j < command_count; j++) {
+                free(paths[j]);
+            }
+            return;
+        }
+        // if pipe succeeded to create then 
+        // pipe[i][0] == read end desc 
+        // pipe[i][1] == write end desc.
+    }
+
+    pid_t children[3]; //this array will store the PIDs of the child processes created for each command in the pipeline.
+    for (int command = 0; command < command_count; command++) {
+        children[command] = fork();
+
+        if (children[command] == -1) {
+            perror("fork");
+            return;
+        }
+
+        if (children[command] == 0) {
+            // Every command after the first reads from the previous pipe.
+            if (command > 0) {
+                dup2(pipes[command - 1][0], STDIN_FILENO);
+                //This ensures that the current command reads from the previous command's output.
+                //Make standard input (STDIN_FILENO, descriptor 0) read from the previous pipe.
+            }
+
+            // Every command before the last writes to the next pipe.
+            if (command < command_count - 1) {
+                dup2(pipes[command][1], STDOUT_FILENO);
+                //This ensures that the current command writes to the next command's input.
+                //Make standard output (STDOUT_FILENO, descriptor 1) write to the next pipe.
+            }
+
+            // The duplicates now replace stdin/stdout, so close all originals.
+            for (int i = 0; i < command_count - 1; i++) {
+                close(pipes[i][0]);
+                close(pipes[i][1]);
+            }
+
+            execv(paths[command], commands[command]);
+            perror("execv");
+            _exit(127);
+        }
+    }
+
+    // The shell parent must close its copies and wait for all pipeline commands.
+    for (int i = 0; i < command_count - 1; i++) {
+        close(pipes[i][0]);
+        close(pipes[i][1]);
+    }
+    if (!is_background) {
+    for (int i = 0; i < command_count; i++) { // if this process is not background, wait for all child processes
+        waitpid(children[i], NULL, 0);
+        free(paths[i]);
+    }
+    }
 }
