@@ -11,6 +11,7 @@
 #include "env_var.h"
 #include "pipe.h"
 #include "output_redirection.h"
+#include "cd.h"
 
 int MAX_JOBS = 10;
 
@@ -45,6 +46,12 @@ int main(void) {
             tokenize(buffer, argv);
             handle_environment_variables(argv); // this is function modifies the argv array by replacing environment variable names with their corresponding values
             if (argv[0] == NULL) {
+                free(buffer);
+                continue;
+            }
+            // Check if the command is "cd" and handle it separately
+            if (strcmp(argv[0], "cd") == 0) {
+                handle_cd(argv);
                 free(buffer);
                 continue;
             }
