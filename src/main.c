@@ -43,15 +43,18 @@ int main(void) {
         
         if (strlen(buffer) > 0){
             char *argv[1024];   //establish the array of tokenized command arguments
+            char *allocated_tokens[1024] = {NULL};
             tokenize(buffer, argv);
-            handle_environment_variables(argv); // this is function modifies the argv array by replacing environment variable names with their corresponding values
+            handle_environment_variables(argv, allocated_tokens); // this function modifies argv and tracks allocated expansions
             if (argv[0] == NULL) {
+                free_expanded_tokens(allocated_tokens);
                 free(buffer);
                 continue;
             }
             // Check if the command is "cd" and handle it separately
             if (strcmp(argv[0], "cd") == 0) {
                 handle_cd(argv);
+                free_expanded_tokens(allocated_tokens);
                 free(buffer);
                 continue;
             }
@@ -61,6 +64,8 @@ int main(void) {
                 
                 if (search_path(argv[0]) != 0) {
                     fprintf(stderr, "Command not found: %s\n", argv[0]);
+                    free_expanded_tokens(allocated_tokens);
+                    free(buffer);
                     continue; // Skip to the next iteration of the while loop if the command is not found in PATH
                 }
             }
@@ -96,6 +101,7 @@ int main(void) {
                     char *path = find_command_path(argv[0]);
                     if (path == NULL) {
                         fprintf(stderr, "%s: command not found\n", argv[0]);
+                        free_expanded_tokens(allocated_tokens);
                         free(buffer);
                         continue;
                     }
@@ -105,6 +111,7 @@ int main(void) {
                     char *path = find_command_path(argv[0]);
                     if (path == NULL) {
                         fprintf(stderr, "%s: command not found!\n", argv[0]);
+                        free_expanded_tokens(allocated_tokens);
                         free(buffer);
                         continue;
                     }
@@ -112,7 +119,7 @@ int main(void) {
                     free(path);
                 }
             }
-                
+            free_expanded_tokens(allocated_tokens);
         }
 
         free(buffer);
