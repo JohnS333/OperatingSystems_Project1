@@ -79,3 +79,18 @@ int print_jobs(void) {
 
     return 0;
 }
+
+void wait_for_jobs(void)
+{
+    for (int i = 0; i < job_count; i++) {
+        int status;
+
+        if (waitpid(jobs[i].pid, &status, 0) == -1) {
+            perror("waitpid");
+        }
+
+        free(jobs[i].command);
+    }
+
+    job_count = 0;
+}
