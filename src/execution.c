@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "jobs.h"
 
 
 void execute_command(char *path, char *argv[], bool is_background) {
@@ -26,6 +27,9 @@ void execute_command(char *path, char *argv[], bool is_background) {
 			perror("Waitpid failed");
 		}
 	} else {
+		if(add_job(pid, argv[0]) < 0) {
+			perror("Failed to add job to array");
+		}
 		printf("[background process started: %d]\n", pid);
 	}
 }

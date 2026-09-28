@@ -7,9 +7,10 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <stdbool.h>
+#include "jobs.h"
 
 
-void handle_redirection(char *path, char *argv[], bool is_background)
+void handle_redirection(char *path, char *argv[], bool is_background, char *command_line)
 {
 	char *input_file = NULL;
 	char *output_file = NULL;
@@ -128,6 +129,13 @@ void handle_redirection(char *path, char *argv[], bool is_background)
 		}
 		} 	else {
 				printf("[background process started: %d]\n", pid);
+				int job_number = add_job(pid, command_line);
+
+				if (job_number < 0) {
+					fprintf(stderr, "Failed to add background job\n");
+				} else {
+					printf("[%d] %d\n", job_number, pid);
+				}
 			}
 
 	// Parent process continues here after the child has executed or failed

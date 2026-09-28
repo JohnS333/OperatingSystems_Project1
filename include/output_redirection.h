@@ -3,6 +3,6 @@
 
 #include <stdbool.h>
 
-void handle_redirection(char *path, char *argv[], bool is_background);
+void handle_redirection(char *path, char *argv[], bool is_background, char *command_line);
 
 #endif

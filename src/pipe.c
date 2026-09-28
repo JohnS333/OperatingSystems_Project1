@@ -5,10 +5,11 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include "jobs.h"
 
 #include "path_search.h"
 
-void handle_pipes(char *argv[], bool is_background) {
+void handle_pipes(char *argv[], bool is_background, char *command_line) {
     int first_pipe = -1;
     int second_pipe = -1;
 
@@ -135,12 +136,13 @@ void handle_pipes(char *argv[], bool is_background) {
         close(pipes[i][0]);
         close(pipes[i][1]);
     }
-    if (!is_background) {
-    for (int i = 0; i < command_count; i++) { // if this process is not background, wait for all child processes
-        waitpid(children[i], NULL, 0);
-        
-    }
-    }
+		if (is_background) {
+			add_job(children[command_count - 1], command_line);
+		} else {
+			for (int i = 0; i < command_count; i++) {
+				waitpid(children[i], NULL, 0);
+			}
+		}
     for (int i = 0; i < command_count; i++) {
         free(paths[i]);
     }

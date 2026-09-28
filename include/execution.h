@@ -3,6 +3,6 @@
 
 #include <stdbool.h>
 
-void execute_command(char *path, char *argv[], bool is_background);
+void execute_command(char *path, char *argv[], bool is_background, char *command_line);
 
 #endif

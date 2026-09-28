@@ -3,5 +3,5 @@
 
 #include <stdbool.h>
 
-void handle_pipes(char *argv[], bool is_background);
+void handle_pipes(char *argv[], bool is_background, char *command_line);
 #endif

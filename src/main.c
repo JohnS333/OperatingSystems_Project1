@@ -12,8 +12,9 @@
 #include "pipe.h"
 #include "output_redirection.h"
 #include "cd.h"
+#include "jobs.h"
 
-int MAX_JOBS = 10;
+const int MAX_JOBS = 10;
 
 struct job {
     int job_number;       // 1, 2, 3...
@@ -30,6 +31,7 @@ int main(void) {
         size_t bufsize = 0; 
         ssize_t characters;
         bool has_redirection = false;
+        check_jobs();
         print_prompt();
         //Read the complete line from standard input and store it in the buffer
         characters = getline(&buffer, &bufsize, stdin);
@@ -40,7 +42,12 @@ int main(void) {
             break;
         }
         buffer[strcspn(buffer, "\n")] = '\0'; // this removes the newline character from the end of the buffer (replaced with a null terminator)
-        
+        char *command_line = strdup(buffer);
+        if (command_line == NULL) {
+            perror("strdup");
+            free(buffer);
+            continue;
+        }
         if (strlen(buffer) > 0){
             char *argv[1024];   //establish the array of tokenized command arguments
             char *allocated_tokens[1024] = {NULL};
@@ -48,6 +55,7 @@ int main(void) {
             handle_environment_variables(argv, allocated_tokens); // this function modifies argv and tracks allocated expansions
             if (argv[0] == NULL) {
                 free_expanded_tokens(allocated_tokens);
+                free(command_line);
                 free(buffer);
                 continue;
             }
@@ -55,9 +63,20 @@ int main(void) {
             if (strcmp(argv[0], "cd") == 0) {
                 handle_cd(argv);
                 free_expanded_tokens(allocated_tokens);
+                free(command_line);
                 free(buffer);
                 continue;
             }
+            // Check if the command is "jobs" and handle it separately
+            if (strcmp(argv[0], "jobs") == 0) {
+                check_jobs();
+                print_jobs();
+                free_expanded_tokens(allocated_tokens);
+                free(command_line);
+                free(buffer);
+                continue;
+            }
+
             //Is the command a path or just a command name?
             if (strchr(argv[0], '/') == NULL) {
                 // The command is not a path, search in PATH
@@ -65,6 +84,7 @@ int main(void) {
                 if (search_path(argv[0]) != 0) {
                     fprintf(stderr, "Command not found: %s\n", argv[0]);
                     free_expanded_tokens(allocated_tokens);
+                    free(command_line);
                     free(buffer);
                     continue; // Skip to the next iteration of the while loop if the command is not found in PATH
                 }
@@ -95,33 +115,36 @@ int main(void) {
 
             if (has_piping) {
                 // handle_pipes finds the path for every command in the pipeline.
-                handle_pipes(argv, is_background);
+                handle_pipes(argv, is_background, command_line);
             } else {
                 if (has_redirection) {
                     char *path = find_command_path(argv[0]);
                     if (path == NULL) {
                         fprintf(stderr, "%s: command not found\n", argv[0]);
                         free_expanded_tokens(allocated_tokens);
+                        free(command_line);
                         free(buffer);
                         continue;
                     }
-                    handle_redirection(path, argv, is_background);
+                    handle_redirection(path, argv, is_background, command_line);
                     free(path);
                 } else {
                     char *path = find_command_path(argv[0]);
                     if (path == NULL) {
                         fprintf(stderr, "%s: command not found!\n", argv[0]);
                         free_expanded_tokens(allocated_tokens);
+                        free(command_line);
                         free(buffer);
                         continue;
                     }
-                        execute_command(path, argv, is_background);
+                        execute_command(path, argv, is_background, command_line);
                     free(path);
                 }
             }
             free_expanded_tokens(allocated_tokens);
         }
 
+        free(command_line);
         free(buffer);
     }
 
