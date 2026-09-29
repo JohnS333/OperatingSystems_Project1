@@ -112,11 +112,11 @@ root/
 ## How to Compile & Execute
 
 ### Requirements
-- **Compiler**: e.g., `gcc` for C/C++, `rustc` for Rust.
-- **Dependencies**: List any libraries or frameworks necessary (rust only).
+- **Compiler**: e.g., `gcc` for C/C++.
+
 
 ### Compilation
-For a C/C++ example:
+
 ```bash
 make clean
 make
@@ -164,10 +164,13 @@ that include things like %d were made with AI. |
 
 
 ## Meetings
-Document in-person meetings, their purpose, and what was discussed.
+Document in-person meetings, their purpose, and what was discussed. -> N/A
 
 | Date       | Attendees            | Topics Discussed | Outcomes / Decisions |
 |------------|----------------------|------------------|-----------------------|
 | 2026-09-13 | Riley Galpin, Taylor Vaugn,  John Simson| Division of Labor   | Discussed and decided how to divide work and began on parts 1-3 and documentation |
 | 2026-09-27| Riley Galpin, Taylor Vaugn,  John Simson | Final Product, Testing, Parts 8&9  | Finished up parts 8 & 9 and began testing as a group. Discussed next steps for testing and began completing final documentation|
 
+
+## Considerations
+[Description]
