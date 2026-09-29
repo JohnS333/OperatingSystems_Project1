@@ -158,14 +158,14 @@ Part 0: Tokenization - [Just use the provided code]
 
 # Part 7: Piping
 - John,  Riley
-- [Done:  True] [Tested: ]
+- [Done:  True] [Tested: True]
 
 
 # Part 8: Background Processing
 - John, Taylor
-- [Done: True ] [Tested: ]
+- [Done: True ] [Tested: True]
 
 
 # Part 9: Internal Command Execution
 - Taylor, John 
-- [Done:  True ] [Tested: ]    
+- [Done:  True ] [Tested: True]    
