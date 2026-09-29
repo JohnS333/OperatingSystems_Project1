@@ -26,7 +26,6 @@ For the mnost part, Main branch should only get updated via a pull request from 
 ## File Listing
 ```
 OperatingSystems_Project1/
-├── bin/
 ├── include/
 │ └── cd.h
 │ └── jobs.h
