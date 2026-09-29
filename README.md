@@ -113,20 +113,6 @@ Document in-person meetings, their purpose, and what was discussed.
 
 
 
-## Bugs
-- **Bug 1**: Errors running on Linprog due to differences in environment specifically in using getline()
-- **Bug 2**: Errors with piping when executing (ls -la | grep shell)
-- **Bug 3**: Output missalignments when executing tests with background processing and piping.
-
-## Extra Credit
-- **Extra Credit 1**: [Extra Credit Option]
-- **Extra Credit 2**: [Extra Credit Option]
-- **Extra Credit 3**: [Extra Credit Option]
-
-## Considerations
-[Description]
-
-
 # Operating Systems Project 1: Division of Labor
 Group Number: 9
 
@@ -145,7 +131,7 @@ Part 0: Tokenization - [Just use the provided code]
 
 # Part 1: Prompt  [Parsing Phase]
 - Riley, John 
-- [Done: True ] [Tested: ? ]
+- [Done: True ] [Tested: True ]
 
 
 # Part 2: Environment Variables [Parsing Phase]
@@ -168,7 +154,7 @@ Part 0: Tokenization - [Just use the provided code]
 
 # Part 6: I/O Redirection
 - Taylor, John 
-[Done: True ] [Tested: ]
+[Done: True ] [Tested: True]
 
 # Part 7: Piping
 - John,  Riley
