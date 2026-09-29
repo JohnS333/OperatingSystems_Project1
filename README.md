@@ -25,25 +25,29 @@ For the mnost part, Main branch should only get updated via a pull request from 
 
 ## File Listing
 ```
-shell/
-│
-├── src/
-│ ├── main.c
-│ ├── background.c
-│ ├── output-redirection.c
-│ ├── pipe.c
-│ ├── signals.c
-│ ├── path_search.c
-│ ├── tokenization.c
-│ ├── execution.c
-│ ├── environment.c
-│
+OperatingSystems_Project1/
+├── bin/
 ├── include/
+│ └── cd.h
+│ └── jobs.h
 │ └── prompt.h
 │ └── path_search.h
+│ └── pipe.h
 │ └── execution.h
 │ └── env_var.h
 │ └── output_redirection.h
+|
+├── src/
+│ ├── cd.c
+│ ├── jobs.c
+│ ├── prompt.c
+│ ├── main.c
+│ ├── output-redirection.c
+│ ├── pipe.c
+│ ├── path_search.c
+│ ├── execution.c
+│ ├── environment.c
+│
 │
 ├── README.md
 └── Makefile
